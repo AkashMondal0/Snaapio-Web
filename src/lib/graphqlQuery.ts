@@ -1,14 +1,16 @@
-import { configs } from "@/configs";
+
+import { configs } from "@/configs"
+import { getBearerToken } from "./getBearerToken";
 interface GraphqlResponse<T> {
     data: T;
     errors: GraphqlError[];
     error: GraphqlError;
 }
 export type GraphqlQueryType = {
-    name: string;
-    operation: string;
-    query: string;
-};
+    name: string
+    operation: string
+    query: string
+}
 export interface GraphqlError {
     message: string;
     locations?: { line: number; column: number }[];
@@ -19,54 +21,51 @@ export interface GraphqlError {
 export const graphqlQuery = async <T>({
     query,
     variables,
-    skipToken = false,
+    url = `${configs.serverApi.baseUrl}/graphql`.replace("/v1", ""),
 }: {
     query: string;
     variables?: any;
-    skipToken?: boolean;
+    url?: string;
     withCredentials?: boolean;
     errorCallBack?: (error: GraphqlError[]) => void;
 }): Promise<T | any> => {
-    let response: Response;
-    const url = `${configs.serverApi.baseUrl}/graphql`.replace("/v1", "");
-    const option: any = (bearerToken: string | undefined = undefined) => {
-        return {
-            method: "POST",
+    try {
+        const BearerToken = await getBearerToken();
+        if (!BearerToken) {
+            console.error("Error retrieving token from SecureStorage");
+            return;
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: "include",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${bearerToken}`,
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${BearerToken}`,
             },
             body: JSON.stringify({
                 query,
                 variables,
             }),
-            cache: "no-cache",
-        };
-    };
+            cache: 'no-cache',
+        });
 
-    if (skipToken) {
-        response = await fetch(url, option());
-    } else {
-        let BearerToken = await fetch(`/api/cookies`)
-        if (!BearerToken.ok) {
-            throw new Error("Network response was not ok");
+        if (!response.ok) {
+            const responseBody: GraphqlResponse<any> = await response.json();
+            console.error(responseBody)
+            throw new Error('Network response was not ok');
         }
-        BearerToken = await BearerToken.json()
-        response = await fetch(url, option(BearerToken));
-    }
 
-    if (!response.ok) {
         const responseBody: GraphqlResponse<any> = await response.json();
-        console.error(responseBody);
-        throw new Error("Network response was not ok");
+
+        if (responseBody?.errors || !responseBody?.data || responseBody?.error) {
+            console.error(responseBody)
+            throw new Error('Error in response');
+        }
+
+        return responseBody.data[Object.keys(responseBody.data)[0]];
+    } catch (e) {
+        console.error("Internal Error", e)
+        throw new Error('Internal Error');
     }
-
-    const responseBody: GraphqlResponse<any> = await response.json();
-
-    if (responseBody?.errors || !responseBody?.data || responseBody?.error) {
-        console.error(responseBody);
-        throw new Error("Error in response");
-    }
-
-    return responseBody.data[Object.keys(responseBody.data)[0]];
-};
+}

@@ -1,18 +1,21 @@
 export const AQ = {
-  feedTimelineConnection: `query FeedTimelineConnection($limitAndOffset: GraphQLPageQuery!) {
-    feedTimelineConnection(limitAndOffset: $limitAndOffset) {
+  feedTimelineConnection: `query FeedTimelineConnection($graphQlPageQuery: GraphQLPageQuery!) {
+    feedTimelineConnection(graphQLPageQuery: $graphQlPageQuery) {
       id
       content
       title
       fileUrl {
-      id
-      urls {
-        low
-        high
+        width
+        height
+        square
+        square_sm
+        blur_square
+        original
+        original_sm
+        blur_original
+        type
+        id
       }
-      type
-      caption
-    }
       createdAt
       updatedAt
       authorId
@@ -27,7 +30,8 @@ export const AQ = {
         profilePicture
       }
     }
-  }`,
+  }
+  `,
   updateUserProfile: `mutation UpdateUserProfile($updateUsersInput: UpdateUsersInput!) {
     updateUserProfile(UpdateUsersInput: $updateUsersInput) {
       profilePicture
@@ -45,13 +49,16 @@ export const AQ = {
       title
       id
       fileUrl {
-      id
-      urls {
-        low
-        high
-      }
-      type
-      caption
+        width
+        height
+        square
+        square_sm
+        blur_square
+        original
+        original_sm
+        blur_original
+        type
+        id
     }
       createdAt
       content
@@ -63,8 +70,8 @@ export const AQ = {
   createStory(createStoryInput: $createStoryInput) {
     __typename
   }}`,
-  findStory: `query FindStory($findStoryId: String!) {
-  findStory(id: $findStoryId) {
+  findStory: `query FindStory($graphQlPageQuery: GraphQLPageQuery!) {
+  findStory(graphQLPageQuery: $graphQlPageQuery) {
     id
     song
     expiresAt
@@ -72,37 +79,42 @@ export const AQ = {
     createdAt
     content
     fileUrl {
-      id
-      urls {
-        low
-        medium
-        high
-      }
+      width
+      height
+      square
+      square_sm
+      blur_square
+      original
+      original_sm
+      blur_original
       type
-      caption
+      id
     }
   }}`,
-  storyTimelineConnection: `query StoryTimelineConnection($limitAndOffset: GraphQLPageQuery!) {
-  storyTimelineConnection(limitAndOffset: $limitAndOffset) {
+  storyTimelineConnection: `query StoryTimelineConnection($graphQlPageQuery: GraphQLPageQuery!) {
+  storyTimelineConnection(graphQLPageQuery: $graphQlPageQuery) {
     id
     name
     lastStatusUpdate
     profilePicture
     username
   }}`,
-  findAllStory: `query FindAllStory($limitAndOffset: GraphQLPageQuery!) {
-  findAllStory(limitAndOffset: $limitAndOffset) {
+  findAllStory: `query FindAllStory($graphQlPageQuery: GraphQLPageQuery!) {
+  findAllStory(graphQLPageQuery: $graphQlPageQuery) {
     content
     authorId
       createdAt
       fileUrl {
-        id
-        urls {
-          high
-          medium
-        }
-        type
-        caption
+        width
+      height
+      square
+      square_sm
+      blur_square
+      original
+      original_sm
+      blur_original
+      type
+      id
       }
       id
       song
@@ -122,4 +134,4 @@ export const AQ = {
       website
     }
   }`
-}
+};

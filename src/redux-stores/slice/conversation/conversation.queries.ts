@@ -1,6 +1,6 @@
 const conversationQueries = {
   findAllConversation: `query FindAllConversation($graphQlPageQuery: GraphQLPageQuery!) {
-    findAllConversation(GraphQLPageQuery: $graphQlPageQuery) {
+    findAllConversation(graphQLPageQuery: $graphQlPageQuery) {  
       id
       members
       authorId
@@ -29,7 +29,7 @@ const conversationQueries = {
     }
   }`,
   findOneConversation: `query FindOneConversation($graphQlPageQuery: GraphQLPageQuery!) {
-    findOneConversation(GraphQLPageQuery: $graphQlPageQuery) {
+    findOneConversation(graphQLPageQuery: $graphQlPageQuery) {  
       id
       members
       authorId
@@ -39,13 +39,16 @@ const conversationQueries = {
         authorId
         content
         fileUrl {
-      id
-      urls {
-        low
-        high
-      }
-      type
-      caption
+          width
+          height
+          square
+          square_sm
+          blur_square
+          original
+          original_sm
+          blur_original
+          type
+          id
     }
         deleted
         seenBy
@@ -81,13 +84,16 @@ const conversationQueries = {
         profilePicture
       }
       fileUrl {
-      id
-      urls {
-        low
-        high
-      }
-      type
-      caption
+        width
+        height
+        square
+        square_sm
+        blur_square
+        original
+        original_sm
+        blur_original
+        type
+        id
     }
       deleted
       seenBy
@@ -109,13 +115,16 @@ const conversationQueries = {
       authorId
       content
       fileUrl {
-      id
-      urls {
-        low
-        high
-      }
-      type
-      caption
+        width
+        height
+        square
+        square_sm
+        blur_square
+        original
+        original_sm
+        blur_original
+        type
+        id
     }
       deleted
       seenBy
@@ -123,12 +132,15 @@ const conversationQueries = {
       updatedAt
     }
   }`,
-  seenMessages: `mutation SeenMessages($conversationId: String!) {
-    seenMessages(conversationId: $conversationId) {
+  seenMessages: `mutation SeenMessages($createMessageInputSeen: CreateMessageInputSeen!) {
+    seenMessages(createMessageInputSeen: $createMessageInputSeen) {
       __typename
     }
   }
-  `
+  `,
+  sendTypingStatus: `query Query($typingStatusInput: TypingStatusInput!) {
+  typingStatus(typingStatusInput: $typingStatusInput)
+}`
 }
 
 export const CQ = Object.freeze(conversationQueries)

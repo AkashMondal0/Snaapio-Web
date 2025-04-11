@@ -24,7 +24,7 @@ const Page = ({
     setLoading("pending")
     try {
       const res = await dispatch(fetchUserProfileFollowerUserApi({
-        username: params.profile,
+        id: params.profile,
         offset: 0,
         limit: 20
       }) as any) as disPatchResponse<AuthorData[]>

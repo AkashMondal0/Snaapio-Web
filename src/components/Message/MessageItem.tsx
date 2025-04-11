@@ -33,7 +33,7 @@ export const MessageItem: FC<MessagesCardProps> = memo(function MessageItem({
                 <div className=''>
                     {data.fileUrl.length > 0 && <OptimizedImage
                         className='rounded-xl border hover:opacity-60 h-60 object-cover w-60'
-                        src={data.fileUrl[0].urls?.high} alt="image" width={100} height={100} />}
+                        src={data.fileUrl[0]?.original} alt="image" width={100} height={100} />}
                     <p className='break-all'>{data?.content}</p>
                     <div className='flex justify-end gap-2'>
                         <div className={`text-sm text-gray-500`}>

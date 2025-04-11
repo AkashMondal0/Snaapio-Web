@@ -3,7 +3,6 @@ import OptimizedImage from '../sky/SkyImage'
 import { Message } from '@/types'
 import { CheckCheck } from 'lucide-react'
 import ViewImageDialog from '../Dialog/ViewImage.Dialog'
-import { cn } from '@/lib/utils'
 
 const MessageFile = ({
   data,
@@ -31,7 +30,7 @@ const MessageFile = ({
                     </div> : <></>}
                   <OptimizedImage
                     className={'h-auto w-auto aspect-square object-cover rounded-xl'}
-                    src={asset.urls?.high} alt="image" width={100} height={100} />
+                    src={asset?.original} alt="image" width={100} height={100} />
                 </div>
               ))}
             </div>
@@ -54,7 +53,7 @@ const MessageFile = ({
 
   return <div>
     {data?.fileUrl?.map((asset, index) => {
-      if (asset.type === "photo") {
+      if (asset.type === "image") {
         return <div
           key={index}
           className={`p-1 my-1 rounded-2xl border ${isProfile ? "bg-primary/90 text-primary-foreground" : "bg-accent"}`}>
@@ -63,7 +62,7 @@ const MessageFile = ({
               <OptimizedImage
                 key={index}
                 className='max-h-96 w-72 object-cover rounded-xl'
-                src={asset.urls?.high} alt="image" width={100} height={100} />
+                  src={asset?.original} alt="image" width={100} height={100} />
               <div className='flex justify-end gap-2 mt-[2px] w-0 shadow-2xl'>
                 <div className='w-max flex px-1'>
                   <div className={`text-sm text-white w-max`}>

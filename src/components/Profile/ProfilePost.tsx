@@ -48,7 +48,7 @@ export const ProfilePost = memo(function ImageComponent({
                 </div>
                 <OptimizedImage
                     fetchPriority="high"
-                    src={data?.fileUrl[0].urls?.high}
+                    src={data?.fileUrl[0]?.original}
                     width={300}
                     height={300}
                     showErrorIcon

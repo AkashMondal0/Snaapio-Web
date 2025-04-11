@@ -31,7 +31,7 @@ export default function Page() {
   const stopRef = React.useRef(false)
 
   const getPostApi = useCallback(async () => {
-    if (loading === "pending" || feedsFetched) return
+    if (loading === "pending" || feedsFetched) return;
     await dispatch(fetchAccountFeedApi({
       limit: 12,
       offset: posts.length,

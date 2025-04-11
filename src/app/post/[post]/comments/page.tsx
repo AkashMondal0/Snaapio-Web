@@ -22,7 +22,7 @@ const Page = ({ params }: { params: { post: string } }) => {
 
   const fetchApi = useCallback(async () => {
     try {
-      const res = await dispatch(fetchOnePostApi(params.post) as any) as disPatchResponse<Post>
+      const res = await dispatch(fetchOnePostApi({id:params.post}) as any) as disPatchResponse<Post>
       if (res.error) {
         setError(true)
         return toast.error("Failed to load post")

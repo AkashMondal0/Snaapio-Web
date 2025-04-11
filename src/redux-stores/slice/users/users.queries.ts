@@ -1,11 +1,11 @@
 export const QUsers = {
-  findUsersByKeyword: `query FindUsersByKeyword($keyword: String!) {
-    findUsersByKeyword(keyword: $keyword) {
-      username
-      profilePicture
-      name
-      id
-      email
-    }
-  }`
+  findUsersByKeyword: `query FindUsersByKeyword($graphQLPageQuery: GraphQLPageQuery!) {
+  findUsersByKeyword(graphQLPageQuery: $graphQLPageQuery) {
+    username
+    email
+    id
+    name
+    profilePicture
+  }
+}`
 }

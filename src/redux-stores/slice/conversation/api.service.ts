@@ -1,19 +1,17 @@
-import { Assets, findDataInput, Post } from "@/types";
+import { findDataInput } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { CQ } from "./conversation.queries";
 import { configs } from "@/configs";
-import { uploadFileToSupabase } from "@/lib/SupaBase-uploadFile";
 import { graphqlQuery } from "@/lib/graphqlQuery";
-import { compressImage } from "@/lib/image.compress";
-import { uuid } from "@/lib/uuid";
-import FileCompressAndUpload from "@/lib/fileCompressAndUpload";
+import { uploadPost } from "@/lib/upload-image";
+
 export const fetchConversationsApi = createAsyncThunk(
     "fetchConversationsApi/get",
-    async (limitAndOffset: findDataInput, thunkAPI) => {
+    async (graphQlPageQuery: findDataInput, thunkAPI) => {
         try {
             const res = await graphqlQuery({
                 query: CQ.findAllConversation,
-                variables: { graphQlPageQuery: limitAndOffset },
+                variables: { graphQlPageQuery },
             });
             return res;
         } catch (error: any) {
@@ -91,7 +89,9 @@ export const CreateMessageApi = createAsyncThunk(
         fileUrl: File[];
     }, thunkAPI) => {
         try {
-            createMessageInput.fileUrl = await FileCompressAndUpload(createMessageInput.fileUrl) as any
+            const fileUrls = createMessageInput?.fileUrl?.length > 0 ? await uploadPost({ files: createMessageInput.fileUrl }) : null;
+            createMessageInput.fileUrl = fileUrls as any;
+            
             const res = await graphqlQuery({
                 query: CQ.createMessage,
                 variables: { createMessageInput },

@@ -1,16 +1,15 @@
-import { AuthorData } from "@/types";
+import { AuthorData, findDataInput } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { QPost } from "./post.queries";
 import { graphqlQuery } from "@/lib/graphqlQuery";
 
 export const fetchOnePostApi = createAsyncThunk(
     'fetchOnePostApi/get',
-    async (findOnePostId: string, thunkApi) => {
+    async (graphQlPageQuery: findDataInput, thunkApi) => {
         try {
             const data = await graphqlQuery({
                 query: QPost.findOnePost,
-                skipToken: true,
-                variables: { findOnePostId }
+                variables: { graphQlPageQuery }
             })
             return data
         } catch (error: any) {
@@ -20,30 +19,6 @@ export const fetchOnePostApi = createAsyncThunk(
         }
     }
 );
-
-export const createPostLikeApi = async (createLikeId: string): Promise<boolean> => {
-    try {
-        await graphqlQuery({
-            query: QPost.createLike,
-            variables: { createLikeId }
-        })
-        return true
-    } catch (error: any) {
-        return false
-    }
-}
-
-export const destroyPostLikeApi = async (destroyLikeId: string): Promise<boolean> => {
-    try {
-        await graphqlQuery({
-            query: QPost.destroyLike,
-            variables: { destroyLikeId }
-        })
-        return true
-    } catch (error: any) {
-        return false
-    }
-}
 
 export const createPostCommentApi = createAsyncThunk(
     'createPostCommentApi/post',

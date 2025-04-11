@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import LikeViewModal from '@/components/Dialog/View.Like.Dialog';
 import { SocketContext } from '@/provider/Socket_Provider';
-import { event_name } from '@/configs/socket.event';
-import { createPostLikeApi, destroyPostLikeApi, fetchPostLikesApi } from '@/redux-stores/slice/post/api.service';
+import { fetchPostLikesApi } from '@/redux-stores/slice/post/api.service';
 import { createNotificationApi, destroyNotificationApi } from '@/redux-stores/slice/notification/api.service';
 import { RootState } from '@/redux-stores/store';
 import useDebounce from '@/lib/debouncing';
+import { useGQMutation } from '@/lib/useGraphqlQuery';
+import { QPost } from '@/redux-stores/slice/post/post.queries';
 
 const PostActions = ({
     post,
@@ -18,96 +19,35 @@ const PostActions = ({
     post: Post
     onNavigate: (path: string) => void,
 }) => {
-    const SocketState = useContext(SocketContext)
-    const dispatch = useDispatch()
-    const session = useSelector((state: RootState) => state.AccountState.session)
+    const dispatch = useDispatch();
     const [like, setLike] = useState({
         isLike: post.is_Liked,
         likeCount: post.likeCount
     })
-    const loading = useRef(false)
 
-    const likeHandle = useCallback(async () => {
-        if (loading.current) return
-        try {
-            loading.current = true
-            if (!session) return toast("You are not logged in")
-            const res = await createPostLikeApi(post.id)
-            if (!res) {
-                return toast("Something went wrong!")
-            }
-            if (post.user.id === session.id) return
-            const notificationRes = await dispatch(createNotificationApi({
-                postId: post.id,
-                authorId: session.id,
-                type: NotificationType.Like,
-                recipientId: post.user.id
-            }) as any) as disPatchResponse<Notification>
-            SocketState.sendDataToServer(event_name.notification.post, {
-                ...notificationRes.payload,
-                author: {
-                    username: session?.username,
-                    profilePicture: session?.profilePicture
-                },
-                post: {
-                    id: post.id,
-                    fileUrl: post.fileUrl[0].urls?.low,
-                }
-            })
-        } catch (error) {
-            toast("Something went wrong!")
-        } finally {
-            loading.current = false
+    const { mutate } = useGQMutation<boolean>({
+        mutation: QPost.createAndDestroyLike,
+        onError: (err) => {
+            setLike((pre) => ({
+                isLike: !pre.isLike,
+                likeCount: !pre.isLike ? pre.likeCount + 1 : pre.likeCount - 1
+            }));
         }
-    }, [post.fileUrl.length, post.id, post.user.id, session])
+    });
 
-    const disLikeHandle = useCallback(async () => {
-        if (loading.current) return
-        try {
-            loading.current = true
-            if (!session) return toast("You are not logged in")
-            const res = await destroyPostLikeApi(post.id)
-            if (!res) {
-                return toast("Something went wrong!")
-            }
-            if (post.user.id === session.id) return
-            await dispatch(destroyNotificationApi({
-                postId: post.id,
-                authorId: session.id,
-                type: NotificationType.Like,
-                recipientId: post.user.id
-            }) as any)
-        } catch (error: any) {
-            toast('Something went wrong!')
-        } finally {
-            loading.current = false
-        }
-    }, [post.id, post.user.id, session])
-
-
-    const delayLike = useCallback(() => {
-        if (like.isLike) {
-            disLikeHandle()
-        } else {
-            likeHandle()
-        }
-    }, [like.isLike])
+    const delayLike = useCallback((value: boolean) => {
+        if (!post?.id) return;
+        mutate({ input: { id: post?.id, like: value } })
+    }, [post?.id])
 
     const debounceLike = useDebounce(delayLike, 500)
 
     const onLike = useCallback(() => {
-        if (like.isLike) {
-            setLike({
-                isLike: false,
-                likeCount: like.likeCount - 1
-            })
-        } else {
-            setLike({
-                isLike: true,
-                likeCount: like.likeCount + 1
-            })
-        }
-        debounceLike()
+        setLike((pre) => ({
+            isLike: !pre.isLike,
+            likeCount: !pre.isLike ? pre.likeCount + 1 : pre.likeCount - 1
+        }))
+        debounceLike(!like.isLike)
     }, [like.isLike, like.likeCount])
 
     const fetchLikes = useCallback(async () => {

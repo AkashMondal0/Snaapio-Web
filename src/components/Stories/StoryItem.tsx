@@ -17,7 +17,7 @@ export const StoryItem = memo(function Story({ data, className }: { data: Highli
         <div className="flex items-end flex-none w-auto h-auto mx-auto">
             <div className={cn(`w-16 h-16 rounded-full cursor-pointer overflow-hidden`, className)}>
                 <SkyAvatar
-                    url={data?.stories[0].fileUrl ? data?.stories[0].fileUrl[0].urls?.high : null}
+                    url={data?.stories[0].fileUrl ? data?.stories[0].fileUrl[0]?.original_sm : null}
                     className={cn('rounded-full object-cover w-full h-full aspect-square')} />
             </div>
         </div>

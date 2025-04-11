@@ -25,7 +25,7 @@ export async function generateMetadata({ params: { post } }: { params: { post: s
 
     const title = `${data.user.name} on Snaapio: ${data.content}`;
     const description = `Posted on: ${new Date(data.createdAt).toDateString()}, Likes: ${data.likeCount}, Comments: ${data.commentCount}, Image: ${data.fileUrl[0]}`;
-    const image = configs.serverApi.supabaseStorageUrl ? configs.serverApi.supabaseStorageUrl + data.fileUrl[0]?.urls?.high : configs.AppDetails.primaryLightLogo
+    const image = configs.serverApi.supabaseStorageUrl ? configs.serverApi.supabaseStorageUrl + data.fileUrl[0]?.square_sm : configs.AppDetails.primaryLightLogo
 
     return {
       title: title,

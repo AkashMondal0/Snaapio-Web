@@ -30,14 +30,13 @@ export interface NavigationProps {
 }
 // user account
 export interface Session {
-        id: string,
-        username: string,
-        email: string,
-        name: string,
-        profilePicture: string,
-        accessToken: string,
-        bio: string,
-        website?: string[] | any[],
+    id: string,
+    username: string,
+    email: string,
+    name: string,
+    profilePicture: string,
+    accessToken?: string,
+    bio?: string,
 }
 export interface AuthorData {
     id: string
@@ -45,13 +44,10 @@ export interface AuthorData {
     email: string
     name: string
     profilePicture?: string | null
-    followed_by?: boolean
-    following?: boolean
-    bio?: string;
-    website?: string[] | any[]
-
-    isPrivate?: boolean | null
-    isVerified?: boolean | null
+    followed_by?: boolean | any
+    following?: boolean | any
+    bio?: string | any
+    website?: string[] | any[];
 }
 export enum Role {
     User = 'user',
@@ -188,16 +184,19 @@ export interface Comment {
     }
 
 }
+
 export type Assets = {
     id?: string,
-    urls?: {
-        low?: string | null,
-        medium?: string | null,
-        high?: string | null,
-        blur?: string | null,
-        thumbnail?: string | null,
-    }
-    type?: 'photo' | 'video' | 'audio' | "text"
+    blur_square: string,
+    square: string,
+    square_sm: string,
+    blur_original: string,
+    original: string,
+    original_sm: string,
+    width: number,
+    height: number,
+    metadata: string
+    type?: 'image' | 'video' | 'audio' | "text"
     caption?: string;
 }
 
@@ -217,10 +216,9 @@ export type Story = {
     status?: "published" | "draft" | "deleted";
 }
 export type findDataInput = {
-    username?: string
     id?: string
-    offset: number
-    limit: number
+    offset?: number
+    limit?: number
 }
 // api response
 export type GraphqlError = {
@@ -260,6 +258,18 @@ export enum NotificationType {
     Story = 'story',
     Post = 'post',
 }
+export type UploadFileRespond = {
+    blur_square: string,
+    square: string,
+    square_sm: string,
+    blur_original: string,
+    original: string,
+    original_sm: string,
+    width: string,
+    height: string,
+    type: string,
+    id: string
+}
 export type Notification = {
     id: string;
     type: NotificationType;
@@ -287,3 +297,18 @@ export type PostActionsProps = {
     storyId?: string
     reelId?: string
 }
+
+export type AIApiResponse = {
+    type: "image" | "text",
+    url: string | null,
+    content: string | null,
+}
+
+export type PremiumSignUpPlan = {
+    title?: string;
+    price?: string;
+    mainPrice: number;
+    yearlyPrice?: string;
+    save?: string;
+    features?: string[];
+};

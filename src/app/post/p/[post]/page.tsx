@@ -18,7 +18,7 @@ const PostPage = ({ params }: { params: { post: string } }) => {
 
   useEffect(() => {
     if (!loadedRef.current) {
-      dispatch(fetchOnePostApi(params.post) as any)
+      dispatch(fetchOnePostApi({id:params.post}) as any)
       loadedRef.current = true;
     }
   }, []);

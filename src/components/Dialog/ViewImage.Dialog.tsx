@@ -14,13 +14,13 @@ const ViewImageDialog = ({
 }) => {
     return (<TempleDialog TriggerChildren={children} headerTitle={'Photos'}>
         {photos?.map((asset, index) => {
-            if (asset.type === "photo") {
+            if (asset.type === "image") {
                 return <div key={index}>
                     <div className='flex justify-end items-end py-2'>
                         <OptimizedImage
                             key={index}
                             className='max-h-full w-full object-cover rounded-xl'
-                            src={asset.urls?.high} alt="image" width={100} height={100} />
+                            src={asset.original} alt="image" width={100} height={100} />
                     </div>
                 </div>
             }

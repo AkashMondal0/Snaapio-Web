@@ -25,7 +25,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (!loadedRef.current) {
-      dispatch(fetchOnePostApi(params.id) as any)
+      dispatch(fetchOnePostApi({id:params.id}) as any)
       loadedRef.current = true;
     }
   }, []);

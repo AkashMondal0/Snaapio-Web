@@ -44,7 +44,7 @@ export default function Page({ params }: { params: { profile: string } }) {
         setLoading("pending")
         try {
             const res = await dispatch(fetchUserProfilePostsApi({
-                username: UserData.current?.id,
+                id: UserData.current?.id,
                 offset: Posts.current.length,
                 limit: 12
             }) as any) as disPatchResponse<Post[]>
@@ -66,7 +66,7 @@ export default function Page({ params }: { params: { profile: string } }) {
 
     const fetchUserData = useCallback(async () => {
         if (UserData.current) return
-        const res = await dispatch(fetchUserProfileDetailApi(username) as any) as disPatchResponse<User>
+        const res = await dispatch(fetchUserProfileDetailApi({id:username}) as any) as disPatchResponse<User>
         if (res.error) {
             setError(res?.error?.message || "An error occurred")
             setLoading("normal")

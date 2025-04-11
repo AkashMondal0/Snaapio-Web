@@ -27,7 +27,7 @@ const PostImage = ({
                             <CarouselItem key={index} className='min-h-80 flex items-center m-auto'>
                                 <OptimizedImage
                                     showErrorIcon
-                                    src={url.urls?.high}
+                                    src={url.original}
                                     width={500}
                                     height={500}
                                     alt="Picture of the author"
