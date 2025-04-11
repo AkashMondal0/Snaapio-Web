@@ -1,6 +1,7 @@
 import { configs } from "@/configs";
 import { loadingType, Session } from "@/types";
 import { useCallback, useEffect, useReducer, useRef } from "react";
+import { getBearerToken } from "./getBearerToken";
 
 
 const _url = `${configs.serverApi.baseUrl}/graphql`.replace("/v1", "");
@@ -79,10 +80,9 @@ export const useRestQuery = <T>({
 
 			try {
 				const BearerToken = enableToken
-					? await getSecureStorage<Session["user"]>(configs.sessionName)
-					: null;
+					? await getBearerToken() : null;
 
-				if (enableToken && !BearerToken?.accessToken) {
+				if (enableToken && !BearerToken) {
 					throw new Error("No access token found");
 				}
 
@@ -91,7 +91,7 @@ export const useRestQuery = <T>({
 					credentials: withCredentials ? "include" : "same-origin",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: enableToken ? `Bearer ${BearerToken?.accessToken}` : "",
+						Authorization: enableToken ? `Bearer ${BearerToken}` : "",
 					},
 					cache: "no-cache",
 					redirect: "follow",

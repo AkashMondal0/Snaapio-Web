@@ -84,6 +84,7 @@ export const UserItemFollow = ({
             followingUserId: session?.id,
             followingUsername: session?.username
         })
+
         if (res) {
             setRemoved(true)
         } else {
