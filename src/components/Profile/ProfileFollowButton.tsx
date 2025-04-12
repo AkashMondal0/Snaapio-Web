@@ -88,7 +88,7 @@ const ProfileFollowButton = memo(function FollowButton({
 
     if (!user) return <div></div>
 
-    if (!session || user.friendship) {
+    if (!session && user.friendship) {
         return (<>
             <div className='md:flex space-x-2 space-y-2 items-center'>
                 <div className="flex items-center">

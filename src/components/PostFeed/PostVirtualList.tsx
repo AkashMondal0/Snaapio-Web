@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual';
 import useWindowDimensions from '@/lib/useWindowDimensions';
-import { NavigationBottom } from '@/components/Navigation/NavigationBottom';
+import { NavigationBottom } from '@/components/Navigation';
 import { AppHeader } from '@/components/Header/Header';
 import { Stories } from '@/components/Stories/Story';
 import { PostUploadProgress } from '@/components/Alert';

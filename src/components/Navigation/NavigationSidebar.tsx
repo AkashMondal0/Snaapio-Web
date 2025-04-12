@@ -28,7 +28,7 @@ import { toggleCreatePostModal, toggleNotificationSidebar, toggleSearchSidebar }
 import { OptimizedImage, SkyAvatar } from "../sky"
 
 // for large screen device 
-export const NavigationSidebar = memo(function NavigationSidebar({
+const NavigationSidebar = memo(function NavigationSidebar({
     hideLabel = false,
     isHideNav = false,
 }: {
@@ -153,7 +153,7 @@ export const NavigationSidebar = memo(function NavigationSidebar({
     return pre.hideLabel === next.hideLabel
         && pre.isHideNav === next.isHideNav
 }))
-
+export default NavigationSidebar;
 const Logo = ({ active, label, onClick, hideLabel, className }: {
     active?: boolean
     label?: string

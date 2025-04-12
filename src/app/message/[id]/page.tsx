@@ -4,12 +4,19 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { Loader2 } from 'lucide-react';
 import { debounce } from 'lodash';
 import { useDispatch, useSelector } from "react-redux"
-import NotFound from "@/components/Error/NotFound";
 import { Conversation, Message, disPatchResponse } from "@/types";
-import { MessageHeader, MessageInput, MessagePageSkeleton, MessageSideBar, NavigationSidebar, MessageItem } from "@/components/Message";
 import { toast } from "sonner";
 import { RootState } from '@/redux-stores/store';
 import { fetchConversationAllMessagesApi, fetchConversationApi } from '@/redux-stores/slice/conversation/api.service';
+import dynamic from 'next/dynamic';
+
+const NotFound = dynamic(() => import("@/components/Error/NotFound"), { ssr: false });
+const MessageHeader = dynamic(() => import("@/components/Message").then(mod => mod.MessageHeader), { ssr: false });
+const MessageInput = dynamic(() => import("@/components/Message").then(mod => mod.MessageInput), { ssr: false });
+const MessagePageSkeleton = dynamic(() => import("@/components/Message").then(mod => mod.MessagePageSkeleton), { ssr: false });
+const MessageSideBar = dynamic(() => import("@/components/Message").then(mod => mod.MessageSideBar), { ssr: false });
+const NavigationSidebar = dynamic(() => import("@/components/Message").then(mod => mod.NavigationSidebar), { ssr: false });
+const MessageItem = dynamic(() => import("@/components/Message").then(mod => mod.MessageItem), { ssr: false });
 
 let pageId = 'no id'
 let totalFetchedItemCount: number | null = 0

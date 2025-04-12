@@ -1,7 +1,7 @@
 import { MessageHeader } from "./MessageHeader";
 import { MessageInput } from "./MessageInput";
-import { MessageSideBar } from "./MessageSideBar";
-import { NavigationSidebar } from "@/components/Navigation/NavigationSidebar";
+import MessageSideBar from "./MessageSideBar";
+import { NavigationSidebar } from "@/components/Navigation";
 import { MessagePageSidebarSkeleton, MessagePageSkeleton } from "./MessageSkeleton";
 import { MessageItem } from "./MessageItem";
 

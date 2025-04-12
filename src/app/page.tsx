@@ -1,18 +1,23 @@
 "use client"
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { AppHeader } from '@/components/Header/Header';
-import { Stories } from '@/components/Stories/Story';
-import { PostUploadProgress } from '@/components/Alert/PostUploadProgress';
 import { useDispatch, useSelector } from 'react-redux';
-import NotFound from '@/components/Error/NotFound';
 import { debounce } from 'lodash';
 import { Loader2 } from 'lucide-react';
 import { Post, disPatchResponse } from '@/types';
-import { PostFeed, PostFeedSkeleton } from '@/components/PostFeed';
-import { NavigationSidebar, NavigationBottom } from '@/components/Navigation';
 import { RootState } from '@/redux-stores/store';
 import { fetchAccountFeedApi } from '@/redux-stores/slice/account/api.service';
+
+import dynamic from 'next/dynamic';
+
+const AppHeader = dynamic(() => import('@/components/Header/Header').then(mod => mod.AppHeader), { ssr: false });
+const Stories = dynamic(() => import('@/components/Stories/Story').then(mod => mod.Stories), { ssr: false });
+const PostUploadProgress = dynamic(() => import('@/components/Alert/PostUploadProgress').then(mod => mod.PostUploadProgress), { ssr: false });
+const NotFound = dynamic(() => import('@/components/Error/NotFound').then(mod => mod.default), { ssr: false });
+const PostFeed = dynamic(() => import('@/components/PostFeed').then(mod => mod.PostFeed), { ssr: false });
+const PostFeedSkeleton = dynamic(() => import('@/components/PostFeed').then(mod => mod.PostFeedSkeleton), { ssr: false });
+const NavigationSidebar = dynamic(() => import('@/components/Navigation').then(mod => mod.NavigationSidebar), { ssr: false });
+const NavigationBottom = dynamic(() => import('@/components/Navigation').then(mod => mod.NavigationBottom), { ssr: false });
 
 let _kSavedOffset = 0;
 let _KMeasurementsCache = [] as any // as VirtualItem[] ;

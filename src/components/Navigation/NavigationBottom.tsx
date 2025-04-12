@@ -11,7 +11,7 @@ import NotificationPing from "../Alert/NotificationPing"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux-stores/store"
 // for small screen device 
-export const NavigationBottom = memo(function NavigationBottom() {
+const NavigationBottom = memo(function NavigationBottom() {
     // console.info("<NavigationBottom/>")
     const router = useRouter()
     const pageChange = (path: string) => router.push(path)
@@ -50,3 +50,5 @@ export const NavigationBottom = memo(function NavigationBottom() {
         </div>
     )
 }, (() => true))
+
+export default NavigationBottom;

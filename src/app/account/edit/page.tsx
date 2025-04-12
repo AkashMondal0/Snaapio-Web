@@ -1,9 +1,5 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Textarea } from '@/components/ui/textarea'
 import React, { useEffect, useState } from 'react'
-import { Switch } from "@/components/ui/switch"
 import {
     Select,
     SelectContent,
@@ -13,21 +9,27 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import SkyAvatar from '@/components/sky/SkyAvatar'
-import OptionAvatarDialog from '@/components/Dialog/Avatar.Options.Dialog'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Moon, Sun } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { AuthorData, disPatchResponse } from '@/types'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Label } from '@/components/ui/label'
 import { RootState } from '@/redux-stores/store'
-import { logoutApi, profileUpdateApi } from '@/redux-stores/slice/auth/api.service'
+import { logoutApi } from '@/redux-stores/slice/auth/api.service'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
+import { Switch } from "@/components/ui/switch"
+import SkyAvatar from '@/components/sky/SkyAvatar'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import dynamic from 'next/dynamic'
+
+const OptionAvatarDialog = dynamic(() => import('@/components/Dialog/Avatar.Options.Dialog'), { ssr: false });
+
 const FormSchema = z.object({
     name: z.string().min(3, {
         message: "Name must be at least 3 characters.",

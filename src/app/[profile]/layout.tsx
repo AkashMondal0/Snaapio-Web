@@ -1,5 +1,5 @@
 import UnauthorizedAlert from "@/components/Alert/UnauthorizedAlert"
-import { NavigationSidebar } from "@/components/Navigation/NavigationSidebar"
+import { NavigationSidebar } from "@/components/Navigation"
 import { configs } from "@/configs"
 import { NotFoundMetadata, metaRobots } from "@/types/Metadata"
 import { Metadata } from "next"

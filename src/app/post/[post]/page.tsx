@@ -1,12 +1,18 @@
 "use client"
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import NotFound from '@/components/Error/NotFound'
-import { ModelPostSkeleton, PostFeed, PostFeedSkeleton, PostImage } from '@/components/PostFeed'
-import { CommentHeader, CommentInput, CommentList } from '@/components/PostFeed/Comment'
-import { AppNavbar } from '@/components/Header/Header'
 import { RootState } from '@/redux-stores/store'
 import { fetchOnePostApi } from '@/redux-stores/slice/post/api.service'
+import dynamic from 'next/dynamic'
+const NotFound = dynamic(() => import('@/components/Error/NotFound'), { ssr: false })
+const ModelPostSkeleton = dynamic(() => import('@/components/PostFeed').then(mod => mod.ModelPostSkeleton), { ssr: false })
+const PostFeed = dynamic(() => import('@/components/PostFeed').then(mod => mod.PostFeed), { ssr: false })
+const PostFeedSkeleton = dynamic(() => import('@/components/PostFeed').then(mod => mod.PostFeedSkeleton), { ssr: false })
+const PostImage = dynamic(() => import('@/components/PostFeed').then(mod => mod.PostImage), { ssr: false })
+const CommentHeader = dynamic(() => import('@/components/PostFeed/Comment').then(mod => mod.CommentHeader), { ssr: false })
+const CommentInput = dynamic(() => import('@/components/PostFeed/Comment').then(mod => mod.CommentInput), { ssr: false })
+const CommentList = dynamic(() => import('@/components/PostFeed/Comment').then(mod => mod.CommentList), { ssr: false })
+const AppNavbar = dynamic(() => import('@/components/Header/Header').then(mod => mod.AppNavbar), { ssr: false })
 
 const PostPage = ({ params }: { params: { post: string } }) => {
   const dispatch = useDispatch()
@@ -18,7 +24,7 @@ const PostPage = ({ params }: { params: { post: string } }) => {
 
   useEffect(() => {
     if (!loadedRef.current) {
-      dispatch(fetchOnePostApi({id:params.post}) as any)
+      dispatch(fetchOnePostApi({ id: params.post }) as any)
       loadedRef.current = true;
     }
   }, []);

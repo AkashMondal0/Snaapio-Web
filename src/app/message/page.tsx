@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
-import { LinkButton } from '@/components/ui/LinkButton';
 import { configs } from '@/configs';
-import { MessageSideBar } from '@/components/Message/MessageSideBar';
-import { NavigationSidebar } from '@/components/Navigation/NavigationSidebar';
+import dynamic from 'next/dynamic';
+
+const LinkButton = dynamic(() => import('@/components/ui/LinkButton').then(mod => mod.LinkButton), { ssr: false });
+const MessageSideBar = dynamic(() => import('@/components/Message').then(mod => mod.MessageSideBar), { ssr: false });
+const NavigationSidebar = dynamic(() => import('@/components/Navigation').then(mod => mod.NavigationSidebar), { ssr: false });
 
 export default function Page() {
   return (

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AuthorData } from '@/types';
 import { useRouter } from 'next/navigation';
 import SkyAvatar from '@/components/sky/SkyAvatar';
-import { NavigationBottom } from '@/components/Navigation/NavigationBottom';
+import { NavigationBottom } from '@/components/Navigation';
 import { LoadingUserCardWithButton } from '@/components/loading/Card';
 import { RootState } from '@/redux-stores/store';
 import { searchUsersProfileApi } from '@/redux-stores/slice/users/api.service';

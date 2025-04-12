@@ -6,7 +6,7 @@ import { ServerCrash, SquarePen } from 'lucide-react';
 import { Button } from '../ui/button';
 import UserToMessage from '@/components/Dialog/UserToMessage.Dialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavigationBottom } from '../Navigation/NavigationBottom';
+import { NavigationBottom } from '@/components/Navigation';
 import { VirtualUserList } from './VirtualUserList';
 import { MessagePageSidebarSkeleton } from './MessageSkeleton';
 import { RootState } from '@/redux-stores/store';
@@ -14,7 +14,7 @@ import { fetchConversationsApi } from '@/redux-stores/slice/conversation/api.ser
 import searchText from '@/lib/TextSearch';
 let pageLoaded = false
 
-export const MessageSideBar = memo(function MessageSideBar() {
+const MessageSideBar = memo(function MessageSideBar() {
     const list = useSelector((Root: RootState) => Root.ConversationState.conversationList) || []
     const loading = useSelector((Root: RootState) => Root.ConversationState.listLoading)
     const error = useSelector((Root: RootState) => Root.ConversationState.listError)
@@ -67,7 +67,7 @@ export const MessageSideBar = memo(function MessageSideBar() {
         </div>
     )
 }, (() => true))
-
+export default MessageSideBar;
 const Header = memo(function Header() {
 
     return <div className='w-full p-4 pb-0 sticky top-0 bg-background z-50'>

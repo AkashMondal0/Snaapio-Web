@@ -1,10 +1,7 @@
 'use client'
 import { useVirtualizer, } from "@tanstack/react-virtual";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { NavigationBottom } from "@/components/Navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { ProfileHero, ProfileHeroSkeleton, ProfileNavbar, ProfilePost } from "@/components/Profile";
-import NotFound from "@/components/Error/NotFound";
 import { debounce } from "lodash";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -13,12 +10,20 @@ import { Button } from "@/components/ui/button";
 import { CirclePlus } from "@/components/sky/icons";
 import { fetchUserProfileDetailApi, fetchUserProfilePostsApi } from "@/redux-stores/slice/profile/api.service";
 import { RootState } from "@/redux-stores/store";
-import PrivateAccount from "@/components/Profile/PrivateAccount";
+import dynamic from 'next/dynamic';
+
+const NavigationBottom = dynamic(() => import("@/components/Navigation").then(mod => mod.NavigationBottom), { ssr: false });
+const NotFound = dynamic(() => import("@/components/Error/NotFound"), { ssr: false });
+const PrivateAccount = dynamic(() => import("@/components/Profile/PrivateAccount"), { ssr: false });
+const ProfileHero = dynamic(() => import("@/components/Profile").then(mod => mod.ProfileHero), { ssr: false });
+const ProfileHeroSkeleton = dynamic(() => import("@/components/Profile").then(mod => mod.ProfileHeroSkeleton), { ssr: false });
+const ProfileNavbar = dynamic(() => import("@/components/Profile").then(mod => mod.ProfileNavbar), { ssr: false });
+const ProfilePost = dynamic(() => import("@/components/Profile").then(mod => mod.ProfilePost), { ssr: false });
 
 let _kSavedOffset = 0;
 let _KMeasurementsCache = [] as any; // as VirtualItem[]
 
-export default function Page({ params }: { params: { profile: string } }) {
+function Component({ username }: { username: string }) {
     const [mounted, setMounted] = useState(false)
     const dispatch = useDispatch()
     const session = useSelector((Root: RootState) => Root.AccountState.session)
@@ -26,10 +31,9 @@ export default function Page({ params }: { params: { profile: string } }) {
     const [error, setError] = useState<string | null>(null)
     const Posts = useRef<Post[]>([])
     const UserData = useRef<User | null>(null)
-    const username = params?.profile
     const postsFetched = useRef(false)
     const count = useMemo(() => Math.ceil(Posts.current.length / 3), [Posts.current.length])
-    const isProfile = useMemo(() => session?.username === params?.profile, [session?.username, params?.profile])
+    const isProfile = session?.username === username;
     //
     const stopRef = useRef(false)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -66,7 +70,7 @@ export default function Page({ params }: { params: { profile: string } }) {
 
     const fetchUserData = useCallback(async () => {
         if (UserData.current) return
-        const res = await dispatch(fetchUserProfileDetailApi({id:username}) as any) as disPatchResponse<User>
+        const res = await dispatch(fetchUserProfileDetailApi({ id: username }) as any) as disPatchResponse<User>
         if (res.error) {
             setError(res?.error?.message || "An error occurred")
             setLoading("normal")
@@ -108,7 +112,7 @@ export default function Page({ params }: { params: { profile: string } }) {
             fetchUserData()
             setMounted(true)
         }
-    }, [params.profile])
+    }, [username])
 
     const items = virtualizer.getVirtualItems()
 
@@ -175,4 +179,9 @@ export default function Page({ params }: { params: { profile: string } }) {
             <NavigationBottom />
         </div>
     )
+}
+
+
+export default function Page({ params }: { params: { profile: string } }) {
+    return <Component username={params.profile} />
 }
