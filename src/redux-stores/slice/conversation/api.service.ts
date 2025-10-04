@@ -1,10 +1,9 @@
-import { findDataInput } from "@/types";
+import { AuthorData, Conversation, findDataInput } from "@/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { CQ } from "./conversation.queries";
 import { configs } from "@/configs";
 import { graphqlQuery } from "@/lib/graphqlQuery";
 import { uploadPost } from "@/lib/upload-image";
-
 export const fetchConversationsApi = createAsyncThunk(
     "fetchConversationsApi/get",
     async (graphQlPageQuery: findDataInput, thunkAPI) => {
@@ -58,14 +57,16 @@ export const fetchConversationAllMessagesApi = createAsyncThunk(
 
 export const CreateConversationApi = createAsyncThunk(
     "CreateConversationApi/post",
-    async (memberIds: string[], thunkAPI) => {
+    async (member: AuthorData[], thunkAPI) => {
         try {
+            const members_e_key = Object.fromEntries(member.map(item => [item.id, item.publicKey]));
             const res = await graphqlQuery({
                 query: CQ.createConversation,
                 variables: {
                     createConversationInput: {
                         isGroup: false,
-                        memberIds,
+                        memberIds: member.map((i) => i.id),
+                        members_e_key: members_e_key
                     },
                 },
             });
@@ -86,17 +87,17 @@ export const CreateMessageApi = createAsyncThunk(
         authorId: string;
         conversationId: string;
         members: string[];
+        membersPublicKey: Conversation["membersPublicKey"]
         fileUrl: File[];
     }, thunkAPI) => {
         try {
             const fileUrls = createMessageInput?.fileUrl?.length > 0 ? await uploadPost({ files: createMessageInput.fileUrl }) : null;
             createMessageInput.fileUrl = fileUrls as any;
-            
             const res = await graphqlQuery({
                 query: CQ.createMessage,
                 variables: { createMessageInput },
             });
-            return res;
+            return res as any;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({
                 ...error?.response?.data,

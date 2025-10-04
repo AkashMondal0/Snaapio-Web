@@ -37,6 +37,8 @@ export interface Session {
     profilePicture: string,
     accessToken?: string,
     bio?: string,
+    privateKey: string
+    publicKey: string
 }
 export interface AuthorData {
     id: string
@@ -44,10 +46,14 @@ export interface AuthorData {
     email: string
     name: string
     profilePicture?: string | null
+    isPrivate?: boolean | null
+    isVerified?: boolean | null
     followed_by?: boolean | any
     following?: boolean | any
     bio?: string | any
     website?: string[] | any[];
+    privateKey?: string
+    publicKey?: string
 }
 export enum Role {
     User = 'user',
@@ -123,7 +129,7 @@ export interface Conversation {
     groupName?: string | null;
     groupImage?: string | null;
     groupDescription?: string | null;
-
+    membersPublicKey:  Record<string, string>;
 }
 export type Typing = {
     typing: boolean

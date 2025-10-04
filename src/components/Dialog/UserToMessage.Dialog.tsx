@@ -72,9 +72,13 @@ const UserCard = ({
     item: AuthorData
 }) => {
     const dispatch = useDispatch();
+    const session = useSelector((Root: RootState) => Root.AccountState.session);
     const router = useRouter()
     const navigate = async () => {
-        const res = await dispatch(CreateConversationApi([item.id]) as any) as disPatchResponse<Conversation>
+        if (!session) return toast.error("Please login to continue")
+        if (!item.id) return toast.error("User id not found")
+        // check if conversation already exists
+        const res = await dispatch(CreateConversationApi([item, session]) as any) as disPatchResponse<Conversation>
         if (res.error) return toast("Something went wrong")
         router.push(`/message/${res.payload.id}`)
     }

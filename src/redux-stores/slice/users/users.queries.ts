@@ -6,6 +6,7 @@ export const QUsers = {
     id
     name
     profilePicture
+    publicKey
   }
 }`
 }

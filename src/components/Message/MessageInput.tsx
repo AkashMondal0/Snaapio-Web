@@ -84,6 +84,7 @@ export const MessageInput = memo(function MessageInput({ data }: { data: Convers
                 content: _data.message,
                 fileUrl: isFile,
                 members: members,
+                membersPublicKey: data.membersPublicKey
             }) as any)
             if (newMessage?.payload?.id) {
                 socketState.socket?.emit(event_name.conversation.message, {

@@ -25,7 +25,7 @@ import SearchSidebar from "../Sidebar/SearchSidebar"
 import UploadPostDialog from "../Dialog/UploadPost.Dialog"
 import { RootState } from "@/redux-stores/store"
 import { toggleCreatePostModal, toggleNotificationSidebar, toggleSearchSidebar } from "@/redux-stores/slice/sidebar"
-import { OptimizedImage, SkyAvatar } from "../sky"
+import { SkyAvatar } from "../sky"
 
 // for large screen device 
 const NavigationSidebar = memo(function NavigationSidebar({
@@ -82,9 +82,7 @@ const NavigationSidebar = memo(function NavigationSidebar({
             indicatorComponent: <NotificationIndicator />
         },
         {
-            icon: <UploadPostDialog>
-                <CopyPlus className="w-full h-full p-[2px]" />
-            </UploadPostDialog>,
+            icon: <CopyPlus className="w-full h-full p-[2px]" />,
             label: "Create",
             onClick: () => { dispatch(toggleCreatePostModal()) }
         },
@@ -121,6 +119,20 @@ const NavigationSidebar = memo(function NavigationSidebar({
                                 popupIndicatorComponent,
                                 indicatorComponent
                             }, index) => {
+                                if (label === "Create") {
+                                    return <UploadPostDialog key={index}>
+                                        <NavigationItem
+                                            key={index}
+                                            icon={icon}
+                                            label={label}
+                                            popupIndicatorComponent={popupIndicatorComponent}
+                                            countIndicatorComponent={countIndicatorComponent}
+                                            indicatorComponent={indicatorComponent}
+                                            hideLabel={hideLabelClass}
+                                            onClick={onClick}
+                                        />
+                                    </UploadPostDialog>
+                                }
                                 return <NavigationItem
                                     key={index}
                                     icon={icon}

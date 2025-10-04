@@ -109,7 +109,7 @@ export const ConversationSlice = createSlice({
                 state?.conversation &&
                 action.payload.conversationId === state?.conversation.id
             ) {
-                state.messages.unshift(action.payload);
+                state.messages.push(action.payload);
             }
         },
         setMessageSeen: (

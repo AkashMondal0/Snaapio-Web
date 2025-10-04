@@ -76,7 +76,7 @@ const ProfileFollowButton = memo(function FollowButton({
         try {
             if (!session?.id) return toast('You are not logged in')
             if (!user?.id || user?.id === session?.id) return toast("Something went wrong")
-            const res = await dispatch(CreateConversationApi([user.id]) as any) as disPatchResponse<Conversation>
+            const res = await dispatch(CreateConversationApi([user, session]) as any) as disPatchResponse<Conversation>
             if (res.error) return toast("Something went wrong")
             router.push(`/message/${res.payload.id}`)
         } catch (error) {
